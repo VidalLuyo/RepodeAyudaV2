@@ -22,12 +22,30 @@ public class CustomerServlet extends HttpServlet {
         response.setContentType("text/html; charset=UTF-8");
 
         String action = request.getParameter("action");
+        String idParam = request.getParameter("id");
+
+        // Validación del parámetro id para evitar NumberFormatException
+        if (idParam == null || idParam.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID de cliente no proporcionado o vacío.");
+            return;
+        }
+
+        int customerId;
+        try {
+            customerId = Integer.parseInt(idParam);
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID de cliente no válido.");
+            return;
+        }
 
         if ("delete".equals(action)) {
             // Eliminar cliente
-            int customerId = Integer.parseInt(request.getParameter("id"));
             customerController.eliminarCliente(customerId);
-            response.sendRedirect("listadoClientes.jsp");
+            response.sendRedirect("listadoProveedores.jsp");
+        } else if ("reactivate".equals(action)) {
+            // Reactivar cliente
+            customerController.reactivarCliente(customerId);
+            response.sendRedirect("listadoProveedores.jsp");
         }
     }
 
@@ -50,7 +68,7 @@ public class CustomerServlet extends HttpServlet {
 
             // Verificar si el status fue enviado
             String statusParam = request.getParameter("status");
-            char status = (statusParam != null && !statusParam.isEmpty()) ? statusParam.charAt(0) : 'A'; // Valor por defecto 'A'
+            char status = (statusParam != null && !statusParam.isEmpty()) ? statusParam.charAt(0) : 'A';
 
             Customer nuevoCliente = new Customer();
             nuevoCliente.setName(name);
@@ -62,11 +80,26 @@ public class CustomerServlet extends HttpServlet {
             nuevoCliente.setStatus(status);
 
             customerController.agregarCliente(nuevoCliente);
-            response.sendRedirect("listadoClientes.jsp");
+            response.sendRedirect("listadoProveedores.jsp");
 
         } else if ("edit".equals(action)) {
             // Editar un cliente existente
-            int customerId = Integer.parseInt(request.getParameter("id"));
+            String idParam = request.getParameter("id");
+
+            // Validación del parámetro id antes de convertirlo a entero
+            if (idParam == null || idParam.isEmpty()) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID de cliente no proporcionado o vacío.");
+                return;
+            }
+
+            int customerId;
+            try {
+                customerId = Integer.parseInt(idParam);
+            } catch (NumberFormatException e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID de cliente no válido.");
+                return;
+            }
+
             String name = request.getParameter("name");
             String lastName = request.getParameter("lastName");
             String address = request.getParameter("address");
@@ -76,7 +109,7 @@ public class CustomerServlet extends HttpServlet {
 
             // Verificar si el status fue enviado
             String statusParam = request.getParameter("status");
-            char status = (statusParam != null && !statusParam.isEmpty()) ? statusParam.charAt(0) : 'A'; // Valor por defecto 'A'
+            char status = (statusParam != null && !statusParam.isEmpty()) ? statusParam.charAt(0) : 'A';
 
             Customer clienteEditado = new Customer();
             clienteEditado.setCustomerId(customerId);
@@ -89,7 +122,7 @@ public class CustomerServlet extends HttpServlet {
             clienteEditado.setStatus(status);
 
             customerController.editarCliente(clienteEditado);
-            response.sendRedirect("listadoClientes.jsp");
+            response.sendRedirect("listadoProveedores.jsp");
         }
     }
 }

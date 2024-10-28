@@ -80,52 +80,7 @@
         </nav>
 
         <main class="p-3">
-            <!-- Card para agregar un nuevo proveedor -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    Registrar Proveedor
-                </div>
-                <div class="card-body">
-                    <form action="CustomerServlet" method="post" accept-charset="UTF-8">
-                        <input type="hidden" name="action" value="add">
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="name">Nombre</label>
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Nombre del proveedor" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="lastName">Apellido</label>
-                                <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Apellido del proveedor" required>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="phone">Teléfono</label>
-                                <input type="text" class="form-control" id="phone" name="phone" placeholder="Teléfono" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="dni">DNI</label>
-                                <input type="text" class="form-control" id="dni" name="dni" placeholder="DNI" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="address">Dirección</label>
-                                <input type="text" class="form-control" id="address" name="address" placeholder="Dirección del proveedor" required>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-success">Agregar Proveedor</button>
-                    </form>
-                </div>
-            </div>
 
             <div class="card mb-4">
                 <div class="card-header">
@@ -149,7 +104,7 @@
                             <tbody>
                             <%
                                 CustomerController suppliersController = new CustomerController();
-                                List<Customer> customers = suppliersController.listarTodos();
+                                List<Customer> customers = suppliersController.listarInactivos();
 
                                 if (customers.isEmpty()) {
                             %>
@@ -169,8 +124,9 @@
                                 <td><%= customer.getEmail() %></td>
                                 <td><%= customer.getStatus() %></td>
                                 <td>
-                                    <a href="editarProveedor.jsp?id=<%= customer.getCustomerId() %>" class="btn btn-primary btn-sm">Editar</a>
-                                    <a href="CustomerServlet?action=delete&id=<%= customer.getCustomerId() %>" class="btn btn-danger btn-sm">Eliminar</a>
+                                    <a href="CustomerServlet?action=reactivate&id=<%= customer.getCustomerId() %>" class="btn btn-success btn-sm">Reactivar</a>
+
+                                    <a href="listadoProveedoresInactivos.jsp" class="btn btn-danger btn-sm">Eliminar</a>
                                 </td>
                             </tr>
                             <%
@@ -191,3 +147,4 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 </body>
 </html>
+

@@ -156,8 +156,10 @@
         </nav>
 
         <!-- Content -->
+        <!-- Content -->
         <div class="container-fluid px-4">
             <h1 class="mt-4">Editar Cliente</h1>
+
 
             <!-- Cargar datos del cliente -->
             <%
@@ -165,6 +167,7 @@
                 CustomerController customerController = new CustomerController();
                 Customer customer = customerController.buscarClientePorId(customerId);
             %>
+
 
             <!-- Formulario para editar el cliente -->
             <div class="card mb-4">
@@ -221,7 +224,11 @@
             </div>
         </div>
 
+
     </div>
+</div>
+
+
 </div>
 
 <!-- Bootstrap JS and dependencies -->
